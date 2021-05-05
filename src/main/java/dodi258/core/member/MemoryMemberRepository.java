@@ -10,14 +10,14 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public void add(Member member) {
-        Long autoIncrementId = new Long(memoryMemberMap.size() + 1);
+        long autoIncrementId = memoryMemberMap.size() + 1;
         member.setId(autoIncrementId);
 
         memoryMemberMap.put(autoIncrementId,member);
     }
 
     @Override
-    public Optional<Member> findById(Long memberId) {
+    public Optional<Member> findById(long memberId) {
         return Optional.ofNullable(memoryMemberMap.get(memberId));
     }
 }

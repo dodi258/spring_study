@@ -1,21 +1,23 @@
 package dodi258.core.order;
 
 public class Order {
-    private Long memberId;
+    private long memberId;
     private String itemName;
-    private Long price;
+    private int price;
+    private int discountPrice;
 
-    public Order(Long memberId, String itemName, Long price) {
+    public Order(long memberId, String itemName, int price, int discountPrice) {
         this.memberId = memberId;
         this.itemName = itemName;
         this.price = price;
+        this.discountPrice = discountPrice;
     }
 
-    public Long getMemberId() {
+    public long getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(Long memberId) {
+    public void setMemberId(long memberId) {
         this.memberId = memberId;
     }
 
@@ -27,12 +29,20 @@ public class Order {
         this.itemName = itemName;
     }
 
-    public Long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(int discountPrice) {
+        this.discountPrice = discountPrice;
     }
 
     @Override

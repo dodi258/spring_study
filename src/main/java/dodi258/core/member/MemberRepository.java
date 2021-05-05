@@ -8,6 +8,6 @@ public interface MemberRepository {
 
     void add(Member member);
 
-    Optional<Member> findById(Long memberId);
+    Optional<Member> findById(long memberId);
 
 }
