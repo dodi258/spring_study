@@ -8,8 +8,13 @@ import dodi258.core.member.MemberServiceImpl;
 
 public class OrderServiceImpl implements OrderService{
 
-    private final MemberService memberService = new MemberServiceImpl();
-    private final DiscountPolicy discountPolicy = new FixedDiscountPolicy();
+    private final MemberService memberService;
+    private final DiscountPolicy discountPolicy;
+
+    public OrderServiceImpl(MemberService memberService, DiscountPolicy discountPolicy) {
+        this.memberService = memberService;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(long memberId, String itemName, int itemPrice) {

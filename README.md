@@ -15,4 +15,6 @@
   
 - Day4 (21/05/06)
     - add JUnit test code, Create Rate discount policy
-    - more: DIP, OCP
+    - modify java code to follow OCP and DIP
+    - more: OCP, DIP
+  
