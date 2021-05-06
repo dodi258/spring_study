@@ -12,3 +12,9 @@
 - Day3 (21/05/05)
     - add JUnit test code, Create discount policy, order service
     - more: static, final
+  
+- Day4 (21/05/06)
+    - add JUnit test code, Create Rate discount policy
+    - modify java code to follow OCP and DIP
+    - more: OCP, DIP
+  
