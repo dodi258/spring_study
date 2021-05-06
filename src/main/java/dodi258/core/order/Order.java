@@ -4,9 +4,9 @@ public class Order {
     private long memberId;
     private String itemName;
     private int price;
-    private int discountPrice;
+    private double discountPrice;
 
-    public Order(long memberId, String itemName, int price, int discountPrice) {
+    public Order(long memberId, String itemName, int price, double discountPrice) {
         this.memberId = memberId;
         this.itemName = itemName;
         this.price = price;
@@ -37,11 +37,11 @@ public class Order {
         this.price = price;
     }
 
-    public int getDiscountPrice() {
+    public double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(int discountPrice) {
+    public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
     }
 
