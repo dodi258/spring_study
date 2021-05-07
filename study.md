@@ -1,5 +1,4 @@
-OCP 
-DIP 
+
 의존 관계가 인터페이스 뿐만 아니라 구현까지 모두 의존하는 문제점이 있음. 
 
 역할: interface 
@@ -23,4 +22,4 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
 --> AppConfig: 애플리케이션의 전체 동작 방식을 구성(CONFIG) 하기 위해, 구현 객체를 생성하고, 연결하는 책임을 가지는 별도의 설정 클래스를 만들면 됨. 
 
 
-
+@BeforeEach : 각 테스트를 실행하기 전에 호출됩니다.

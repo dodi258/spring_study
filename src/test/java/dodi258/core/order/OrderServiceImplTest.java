@@ -1,17 +1,26 @@
 package dodi258.core.order;
 
+import dodi258.core.configuration.AppConfig;
 import dodi258.core.member.Grade;
 import dodi258.core.member.Member;
 import dodi258.core.member.MemberService;
-import dodi258.core.member.MemberServiceImpl;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 class OrderServiceImplTest {
 
-    MemberService memberService = new MemberServiceImpl();
-    OrderService orderService = new OrderServiceImpl();
+    // Class to test
+    MemberService memberService;
+    OrderService orderService;
+
+    @BeforeEach
+    public void beforeEach() {
+        AppConfig appConfig = new AppConfig();
+        memberService = appConfig.memberService();
+        orderService = appConfig.orderService();
+    }
 
     @Test
     void createOrder() {
