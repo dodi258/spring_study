@@ -1,17 +1,24 @@
 package dodi258.core.discount;
 
+import dodi258.core.configuration.AppConfig;
 import dodi258.core.member.Grade;
 import dodi258.core.member.Member;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 class RateDiscountPolicyTest {
 
-    DiscountPolicy discountPolicy = new RateDiscountPolicy();
+    // Class to test
+    DiscountPolicy discountPolicy;
+
+    @BeforeEach
+    public void beforeEach() {
+        AppConfig appConfig = new AppConfig();
+        discountPolicy = appConfig.discountPolicy();
+    }
 
     @Test
     @DisplayName("VIP 는 10% 할인이 적용 되어야 한다.")
