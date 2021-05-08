@@ -65,4 +65,17 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
             - IoC 컨테이너 또는 DI 컨테이너라고 한다. 
             - 어셈블러, 오브젝트 팩토리 등으로 불리기도 한다. 
 
-
+### * ) Spring application 
+    - @Configuration: AppConfig에 설정을 구성할 것이라는 뜻
+    - @Bean(name=""): 스프링 컨테이너에 스프링 빈으로 등록한다는 것. 이름을 직접 지정할  있음 안하면 메서드이름이 기본 이름이 됨. 수
+                      ** 빈 이름은 항상 다른 이름을 부여해야함.**
+    - ApplicationContext: 스프링 컨테이너. DI 를 스프링 컨테이너가 도맡아서 함. 
+    - 스프링 컨테이너를 통해 필요한 스프링 빈(객체)를 찾는다. 스프링 빈은 applicationContext.getBean()메서드를 통해서 직접 
+      찾을 수 있다. 
+    - 기존에는 개발자가 직접 자바 코드로 모든 것을 했다면 이제부터는 스프링 컨테이너에 객체를 스프링 빈으로 등록하고 스프링 컨테이너에서 스프링 빈을 찾아서 사용하도록 변경 됨. 
+    - AnnotationConfigApplicationContext(AppConfig.class) :
+      1. AnnotationConfigApplicationContext
+         :스프링 컨테이너는 XML, annotation 두가지 방식으로 만들어질 수 있다.
+          @Configuration을 붙여 만든 설정 클래스는 annotation 기반이고 위의 AnnotationConfigurationApplicationContext 는 
+          ApplicationContext의 Annotation 구현체이다. 
+      2. AppConfig.class 는 구성 정보임. 

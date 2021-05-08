@@ -22,3 +22,6 @@
     - Finish refactoring the code and AppConfig class
     - applied DIP, OCP 
   
+- Day6 (21/05/08)
+    - study spring container
+    - start to change java application to spring application
