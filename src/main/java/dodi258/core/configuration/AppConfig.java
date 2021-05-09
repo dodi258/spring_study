@@ -8,23 +8,30 @@ import dodi258.core.member.MemberServiceImpl;
 import dodi258.core.member.MemoryMemberRepository;
 import dodi258.core.order.OrderService;
 import dodi258.core.order.OrderServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class AppConfig {
 
+    @Bean
     public MemberService memberService() {
         return new MemberServiceImpl(memberRepository());
     }
 
+    @Bean
     public OrderService orderService() {
         return new OrderServiceImpl(
                 memberService(),
                 discountPolicy());
     }
 
+    @Bean
     public MemberRepository memberRepository() {
         return new MemoryMemberRepository();
     }
 
+    @Bean
     public DiscountPolicy discountPolicy() {
         return new FixedDiscountPolicy();
 //        return new RateDiscountPolicy();
