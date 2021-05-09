@@ -28,3 +28,4 @@
   
 - Day7 (21/05/09)
     - Study spring container
+    - Study Singleton design pattern
