@@ -25,3 +25,6 @@
 - Day6 (21/05/08)
     - study spring container
     - start to change java application to spring application
+  
+- Day7 (21/05/09)
+    - Study spring container

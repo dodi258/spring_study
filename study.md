@@ -65,7 +65,7 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
             - IoC 컨테이너 또는 DI 컨테이너라고 한다. 
             - 어셈블러, 오브젝트 팩토리 등으로 불리기도 한다. 
 
-### * ) Spring application 
+### * ) Spring Container 
     - @Configuration: AppConfig에 설정을 구성할 것이라는 뜻
     - @Bean(name=""): 스프링 컨테이너에 스프링 빈으로 등록한다는 것. 이름을 직접 지정할  있음 안하면 메서드이름이 기본 이름이 됨. 수
                       ** 빈 이름은 항상 다른 이름을 부여해야함.**
@@ -78,4 +78,64 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
          :스프링 컨테이너는 XML, annotation 두가지 방식으로 만들어질 수 있다.
           @Configuration을 붙여 만든 설정 클래스는 annotation 기반이고 위의 AnnotationConfigurationApplicationContext 는 
           ApplicationContext의 Annotation 구현체이다. 
-      2. AppConfig.class 는 구성 정보임. 
+      2. AppConfig.class 는 구성 정보임.
+
+    BeanFactory 와 ApplicationContext
+        BeanFactory <-- ApplicationContext <-- AnnotationConfigApplicationContext
+      1. BeanFactory:
+        - 스프링 컨테이너 최상위 인터페이스
+        - 스프링 빈을 관리하고 조회하는 역할을 담당한다. 
+        - getBean()  을 제공한다.
+        - 지금까지 우리가 사용했던 대부분의 기능은 BeanFactory가 제공하는 기능이다. 
+      2. ApplicationContext
+        - BeanFactory 기능을 모두 상속받아서 제공한다.
+        - 빈을 관리하고 검색하는 기능을 BeanFactory가 제공하는데, 그러면 둘의 차이가 뭘까 ? 
+        - 애플리케이션을 개발할 때는 빈을 관리하고 조회하는 기능은 물론이고, 수 많은 부가기능이 필요하다. 
+        - ApplicationContext가 제공하는 기능: MessageSource, EnvironmentCapable, ApplicationEventPublisher, ResourceLoader
+        - MessageSource: 언어 처리 - 한국에서 들어오면 한국어로, 영어권에서 들어오면 영어로 출력
+        - EnvironmentCapable: 환경 변수 - 로컬, 개발 운영등을 구분해서 처리
+        - ApplicationEventPublisher: 애플리케이션 이벤트 - 이벤트를 발행하고 구독하는 모델을 편리하게 지원
+        - 명ResourceLoader: 편리한 리로스 조회 - 파일, 클래스패스, 외부 등에서 리소스를 편리하게 조회
+        
+        => BeanFactory와 ApplicationContext를 스프링 컨테이너라고 부른다.
+    
+    BeanDefinition
+        -BeanClassName: 생성할 빈의 클래스 명(자바 설정 처럼 팩토리 역할의 빈을 사용하면 없음) 
+        - factoryBeanName: 팩토리 역할의 빈을 사용할 경우 이름, 예) appConfig 
+        - factoryMethodName: 빈을 생성할 팩토리 메서드 지정, 예) memberService
+        - Scope: 싱글톤(기본값)
+        - lazyInit: 스프링 컨테이너를 생성할 때 빈을 생성하는 것이 아니라, 실제 빈을 사용할 때 까지 최대한 생성을 지연처리 하는지 여부
+        - InitMethodName: 빈을 생성하고, 의존관계를 적용한 뒤에 호출되는 초기화 메서드 명 
+        - DestroyMethodName: 빈의 생명주기가 끝나서 제거하기 직전에 호출되는 메서드 명 
+        - Constructor arguments, Properties: 의존관계 주입에서 사용한다. (자바 설정 처럼 팩토리 역할 의 빈을 사용하면 없음) 
+        - BeanClassName: 생성한 빈의 클래스 
+
+### * ) SingleTon Pattern
+    - 클래스의 인스턴스가 딱 1개만 생성되는 것을 보장하는 디자인 패턴
+    - private 생성자를 사용하여 외부에서 임의로 NEW 키워드를 사용하지 못하도록 막는다. 
+    - 싱글톤 패턴의 문제점
+      - 싱글톤 패턴을 구현하는 코드 자체가 많이 들어간다.
+      - 의존 관계상 클라이언트가 구체 클래스에 의존한다. DIP 를 위반한다.
+      - 클라이언트가 구체 클래스에 의존해서 OCP 원칙을 위반할 가능성이 높다. 
+      - 테스트하기 어렵다. 
+      - 내부 속성을 변경하거나 초기화 하기 어렵다. 
+      - private 생성자로 자식 클래스를 만들기 어렵다. 
+      - 결론적으로 유연성이 떨어진다. 
+      - 안티 패턴으로 불리기도 한다. 
+
+    싱글톤 컨테이너: 스프링 컨테이너는 싱글톤 패턴의 문제점을 해결하면서, 객체 인스턴스를 싱글톤(1개만 생성)으로 관리한다. 스프링 빈이 바로 싱글톤으로 관리되는 빈이다. 
+    - 스프링 컨테이너는 싱글턴 페턴을 적용하지 않아도, 객체 인스턴스를 싱글톤으로 관리한다. 
+    - 싱글톤 레지스트리 : 스프링 컨테이너는 싱글톤 컨테이너 역할을 한다. 이렇게 싱글톤 객체를 생성하고 관리하는 기능을 싱글톤 레지스트리라 한다. 
+    - DIP, OCP, 테스트, private 생성자로 부터 자유롭게 싱글톤을 사용할 수 있다. 
+    - 스프링은 기본 빈 등록 방식이 싱글톤이지만, 요청할 때마다 새로운 객체를 생성하는 기능도 제공한다. 
+
+    싱글톤 방식의 주의점:
+    - 객체 인스턴스를 하나만 생성해서 공유하는 싱글톤 방식은 여러 클라이언트가 하나의 같은 객체 인스턴스를 공유하기 때문에 싱글톤 객체는 상태를 유지하게 설계하면 안된다. 
+    - 무상태로 (stateless)로 설계해야 한다.
+        - 특정 클라이언트에 의존적인 필드가 있으면 안된다. 
+        - 특정 클라이언트가 값을 변경할 수 있는 필드가 있으면 안된다!
+        - 가급적 읽기만 가능해야 한다.
+        - 필드 대신에 자바에서 공유되지 않는, 지역변수, 파라미터, ThreadLocal 등을 사용해야 한다. 
+    - 스프링 빈의 필드에 공유 값을 설정하면 정말 큰 장애가 발생할 수 있다!!
+
+
