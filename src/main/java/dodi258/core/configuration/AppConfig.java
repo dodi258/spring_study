@@ -9,7 +9,9 @@ import dodi258.core.member.MemoryMemberRepository;
 import dodi258.core.order.OrderService;
 import dodi258.core.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
 @Configuration
 public class AppConfig {
@@ -37,6 +39,7 @@ public class AppConfig {
 //        return new RateDiscountPolicy();
 
     }
+
 }
 
 

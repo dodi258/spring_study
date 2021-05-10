@@ -29,3 +29,8 @@
 - Day7 (21/05/09)
     - Study spring container
     - Study Singleton design pattern
+  
+- Day8 (21/05/10)
+    - Study component Scan
+    - Make new spring configuration file
+  
