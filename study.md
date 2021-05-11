@@ -260,6 +260,33 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
 - Final keyword: 생성자 주입을 사용하면 필드에 FINAL 키워드를 사용할 수 있다. 그래서 혹시라도 값이 설정되지 않는 오류를 컴파일 시점에 막아준다.
 - 수정자 주입을 포함한 나머지 주입 방식은 모두 생성자 이후에 호출되므로, 필드에 FINAl 키워드를 사용할 수 없음.
 
+#### 롬복 (lombok)
+- 간결하게 생성자 주입을 사용할 수 있음.
+- @RequiredArgsConstructor 기능을 이용하면 final 이 붙은 필드를 모아서 생성자를 자동으로 만들어준다. 
+- 최근에는 생성자를 1개 두고, @Autowired 를 사용하는 방법 이나 lombok 사용 
+~~~java
+import javax.swing.*;
 
+// 롬복 사용 전 
+@Component
+public class OrderServiceImpl implements OrderService {
+    private final MemberService memberService; 
+    private final DiscountPolicy discountPolicy; 
+    // @Autowired --> 생략 가능. 
+    public OrderServiceImpl(MemberService memberService, DiscountPolicy discountPolicy) {
+        this.memberService = memberService; 
+        this.discountPolicy = discountPolicy; 
+    }
+}
+~~~
 
+~~~java
+// 롬복 사용 후 
+@Component
+@RequiredArgsConstructor
+public class OrderServiceImpl implements OrderService {
+    private final MemberService memberService; 
+    private final DiscountPolicy discountPolicy; 
+}
+~~~
 

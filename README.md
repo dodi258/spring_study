@@ -37,3 +37,4 @@
 - Day9 (21/05/11)
     - Component scan filtering with annotation 
     - Dependency injection
+    - Lombok
