@@ -38,3 +38,4 @@
     - Component scan filtering with annotation 
     - Dependency injection
     - Lombok
+    - Handle same type of beans with annotations

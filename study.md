@@ -290,3 +290,76 @@ public class OrderServiceImpl implements OrderService {
 }
 ~~~
 
+#### 조회 빈이 2개 이상일 때 
+   해결 방법 
+   - @Autowired 필드명 매칭 
+   - @Qualifier
+   - @Primary
+
+   1. @Autowired 
+      : 는 타입 매칭을 시도하고, 이때 여러 빈이 있으면 1) 필드 이름, 2) 파라미터 이름으로 빈 이름을 추가 매칭한다.
+      밑에 같은 경우 필드명이 특정되어 있으므로 정상 주입된다.
+      ~~~ java
+         // 기존  
+         @Autowired
+         private DiscountPolicy discountPolicy; 
+      ~~~ 
+      ~~~ java
+         // 필드명을 빈 이름으로 변경  
+         @Autowired
+         private DiscountPolicy rateDiscountPolicy; 
+      ~~~ 
+
+   2. Qualifier
+      : 는 추가 구분자를 붙여주는 방법이다. 이름변경은 아님 
+      - 빈 등록시 @Qualifier를 붙여준다. 
+      - 주입시에 @Qualifier를 붙여주고 등록한 이름을 적어준다. 
+      ~~~java
+      // 빈등록 
+      @Component
+      @Qualifier("mainDiscountPolicy")
+      public class RateDiscountPolicy implements DiscountPolicy {}
+      ~~~
+      ~~~java
+      // 빈등록 
+      @Component
+      @Qualifier("fixedDiscountPolicy")
+      public class FixDiscountPolicy implements DiscountPolicy {}
+      ~~~
+      
+      ~~~java
+      // 생성자 자동 주입 
+      @Autowired
+      public OrderServiceImpl(MemberService memberService, @Qualifier("mainDiscountPolicy") DiscountPolicy) {
+        this.memberService = memberService; 
+        this.discountPolicy = discountPolicy; 
+      }
+      ~~~
+        ~~~java
+      // 수정자 자동 주입 
+      @Autowired
+      public void setDiscountPolicy(@Qualifier("mainDiscountPolicy") DiscountPolicy) {
+        this.discountPolicy = discountPolicy; 
+      }
+      ~~~
+      
+      빈 등록시에도 @Qualifier 사용 가능 
+      ~~~java
+      @Bean 
+      @Qualifier("mainDiscountPolicy")
+      public DiscountPolicy discountPolicy() {
+        return new RateDiscountPolicy(); 
+      }
+      ~~~
+      
+   3. @Primary 
+   : 우선 순위를 정하는 방법, @Autowired 시에 여러 빈이 매칭되면 @Primary 가 우선권을 가진다. 
+      ~~~java
+      @Component
+      @Primary 
+      public class RateDiscountPolicy implements DiscountPolicy {}
+      
+      @Component
+      public class FixedDiscountPolicy implements DiscountPolicy {} 
+      ~~~
+   어떤 방법이 좋을까 ?? 
