@@ -153,4 +153,213 @@ DiscountPolicy discountPolicy = new FixedDiscountPolicy() <-- 구체 클래스
         - @Repository : 스프링 데이터 접근 계층에서 사용 - 스프링 데이터 접근 계층으로 인식, 데이터 계층의 예외를 스프링 예외로 변환 
         - @Configuration : 스프링 설정 정보에서 사용 - 스프링 설정 정보로 인식하고, 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한ㅏ. 
 
+### * ) 의존 관계 주입 (Dependency Injection)
+의존관계 자동 주입은 스프링 컨테이너가 관리하는 스프링 빈이어야 동작한다. 
+스프링 빈이 아닌 Member 같은 클래스에서 @Autowired 코드를 적용해도 아무 기능도 동작하지 않는다.
 
+의존 관계 주입 4가지 방법 
+- 생성자 주입
+- 수정자 주입 (setter 주입)
+- 필드 주입
+- 일반 메서드 주입
+
+1. 생성자 주입
+   - 생성자를 통해 의존 관계 주입 받는 방법
+   - 특징 : 
+     - 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
+     - **불변**, **필수** 의존관계에 사용
+     - 생성자가 딱 한개있으면 @Autowired 를 생략해도 자동 주입된다. 
+    ```java
+    @Component 
+   public class OrderServiceImpl implements OrderSerivce {
+       private final MemberService memberService; 
+       private final DiscountPolicy discountPolicy; 
+       
+       //@Autowired --> 생략 가능
+       public OrderServiceImpl(MemberService memberService, DiscountPolicy discountPolicy) {
+           this.memberService = memberService; 
+           this.discountPolicy = discountPolicy;
+       }
+   }
+   ```
+   
+2. 수정자 주입
+    - setter 라 불리는 필드의 값을 변경하는 수정자 메서드를 통해서 의존 관계를 주입하는 방법
+    - 꼭 set 메서드를 불러서 지정해줘야만 주입이 된다. (그 전엔 null 인 상태)
+    - 특징: 
+        - **선택**, **변경** 가능성이 있는 의존 관계에 사용 
+        - 자바빈 프로퍼티 규약의 수정자 메서드 방식을 사용하는 방법 ?
+            --> 자바빈 프로퍼티 규약 : setXxx, getXxx 메서드를 통해서 값을 읽거나 수정하는 규칙
+        - 의존하는 빈이 생성이 아직 안되어있는 경우에도 사용이 가능함. @Autowired(required=false)
+        - @Autowired(required=false) : @Autowired 의 기본 동작은 주입할 대상이 없으면 오류가 발생한다. 주입할 대상이 없어도 동작하게 하려면 required=false를 붙이면 된다. 
+        ~~~ java
+        @Component 
+        public class OrderServiceImpl implements OrderSerivce {
+           private MemberService memberService; 
+           private DiscountPolicy discountPolicy; 
+           
+           @Autowired(required = false) 
+           public void setMemberService(MemberService memberService) {
+               this.memberService = memberService; 
+           }
+            
+           @Autowired
+           public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+               this.discountPolicy = discountPolicy; 
+           }
+        }
+        ~~~
+      
+3. 필드 주입
+    - 이름 그댈 필드에 바로 주입하는 방법 
+    - 특징 
+        - 코드가 간결해서 많은 개발자들을 유혹하지만 외부에서 변경이 불가능해서 테스트 하기 힘들다는 치명적 단점 
+        - DI 프레임 워크가 없다면 아무것도 할 수 없다. 
+        - 사용하지 말자!
+        - 애플리케이션의 실제 코드와는 관계없는 테스트 코드에는 가능 --> @SpringBootTest 
+        - 스프링 설정을 목적으로 하는 @Configuration 같은 곳에서만 특별한 용도로 사용
+
+        ~~~java
+       @Component
+       public class OrderServiceImpl implements OrderServie { 
+            @Autowired
+            private MemberService memberService; 
+            
+            @Autowired
+            private DiscountPolicy discountPolicy;
+       }
+       ~~~
+      
+4. 일반 메서드 주입
+    - 일반 메서드를 통해 주입받는다. 
+    - 잘 쓰이지 않음.
+   
+        ~~~java
+       @Component
+       public class OrderServiceImpl implements OrderService {
+           private MemberRepository memberRepository;
+           private DiscountPolicy discountPolicy;
+    
+           @Autowired
+           public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+               this.memberRepository = memberRepository;
+               this.discountPolicy = discountPolicy;
+           }
+       }
+        ~~~
+
+
+#### 의존관계 주입 - 옵션 처리
+- @Autowired(required=false) : 자동 주입할 대상이 없으면 수정자 메서드 자체가 호출 안됨 
+- org.springframework.lang.@Nullable : 자동 주입할 대상이 없으면 null이 입력된다.
+- Optional<> : 자동 주입할 대상이 없으면 Optional.empty 가 입력된다.
+
+#### *생성자 주입을 선택하세요*!
+- 생성자 주입은 객체를 생성할 때 딱 1번만 호출되므로 이후에 호출되는 일이 없다. 따라서 불변하게 설계할 수 있다. 
+- 프레임 워크 없이 순수한 자바 코드를 단위 테스트 하는 경우에 좋음. 
+- Final keyword: 생성자 주입을 사용하면 필드에 FINAL 키워드를 사용할 수 있다. 그래서 혹시라도 값이 설정되지 않는 오류를 컴파일 시점에 막아준다.
+- 수정자 주입을 포함한 나머지 주입 방식은 모두 생성자 이후에 호출되므로, 필드에 FINAl 키워드를 사용할 수 없음.
+
+#### 롬복 (lombok)
+- 간결하게 생성자 주입을 사용할 수 있음.
+- @RequiredArgsConstructor 기능을 이용하면 final 이 붙은 필드를 모아서 생성자를 자동으로 만들어준다. 
+- 최근에는 생성자를 1개 두고, @Autowired 를 사용하는 방법 이나 lombok 사용 
+~~~java
+import javax.swing.*;
+
+// 롬복 사용 전 
+@Component
+public class OrderServiceImpl implements OrderService {
+    private final MemberService memberService; 
+    private final DiscountPolicy discountPolicy; 
+    // @Autowired --> 생략 가능. 
+    public OrderServiceImpl(MemberService memberService, DiscountPolicy discountPolicy) {
+        this.memberService = memberService; 
+        this.discountPolicy = discountPolicy; 
+    }
+}
+~~~
+
+~~~java
+// 롬복 사용 후 
+@Component
+@RequiredArgsConstructor
+public class OrderServiceImpl implements OrderService {
+    private final MemberService memberService; 
+    private final DiscountPolicy discountPolicy; 
+}
+~~~
+
+#### 조회 빈이 2개 이상일 때 
+   해결 방법 
+   - @Autowired 필드명 매칭 
+   - @Qualifier
+   - @Primary
+
+   1. @Autowired 
+      : 는 타입 매칭을 시도하고, 이때 여러 빈이 있으면 1) 필드 이름, 2) 파라미터 이름으로 빈 이름을 추가 매칭한다.
+      밑에 같은 경우 필드명이 특정되어 있으므로 정상 주입된다.
+      ~~~ java
+         // 기존  
+         @Autowired
+         private DiscountPolicy discountPolicy; 
+      ~~~ 
+      ~~~ java
+         // 필드명을 빈 이름으로 변경  
+         @Autowired
+         private DiscountPolicy rateDiscountPolicy; 
+      ~~~ 
+
+   2. Qualifier
+      : 는 추가 구분자를 붙여주는 방법이다. 이름변경은 아님 
+      - 빈 등록시 @Qualifier를 붙여준다. 
+      - 주입시에 @Qualifier를 붙여주고 등록한 이름을 적어준다. 
+      ~~~java
+      // 빈등록 
+      @Component
+      @Qualifier("mainDiscountPolicy")
+      public class RateDiscountPolicy implements DiscountPolicy {}
+      ~~~
+      ~~~java
+      // 빈등록 
+      @Component
+      @Qualifier("fixedDiscountPolicy")
+      public class FixDiscountPolicy implements DiscountPolicy {}
+      ~~~
+      
+      ~~~java
+      // 생성자 자동 주입 
+      @Autowired
+      public OrderServiceImpl(MemberService memberService, @Qualifier("mainDiscountPolicy") DiscountPolicy) {
+        this.memberService = memberService; 
+        this.discountPolicy = discountPolicy; 
+      }
+      ~~~
+        ~~~java
+      // 수정자 자동 주입 
+      @Autowired
+      public void setDiscountPolicy(@Qualifier("mainDiscountPolicy") DiscountPolicy) {
+        this.discountPolicy = discountPolicy; 
+      }
+      ~~~
+      
+      빈 등록시에도 @Qualifier 사용 가능 
+      ~~~java
+      @Bean 
+      @Qualifier("mainDiscountPolicy")
+      public DiscountPolicy discountPolicy() {
+        return new RateDiscountPolicy(); 
+      }
+      ~~~
+      
+   3. @Primary 
+   : 우선 순위를 정하는 방법, @Autowired 시에 여러 빈이 매칭되면 @Primary 가 우선권을 가진다. 
+      ~~~java
+      @Component
+      @Primary 
+      public class RateDiscountPolicy implements DiscountPolicy {}
+      
+      @Component
+      public class FixedDiscountPolicy implements DiscountPolicy {} 
+      ~~~
+   어떤 방법이 좋을까 ?? 

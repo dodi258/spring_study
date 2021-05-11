@@ -34,3 +34,8 @@
     - Study component Scan
     - Make new spring configuration file
   
+- Day9 (21/05/11)
+    - Component scan filtering with annotation 
+    - Dependency injection
+    - Lombok
+    - Handle same type of beans with annotations
