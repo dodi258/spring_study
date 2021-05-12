@@ -39,3 +39,8 @@
     - Dependency injection
     - Lombok
     - Handle same type of beans with annotations
+  
+- Day10 (21/05/12)
+    - code implementation for selecting beans 
+    - Bean's lifecycle 
+    - Bean's lifecycle callback
