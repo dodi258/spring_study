@@ -44,3 +44,7 @@
     - code implementation for selecting beans 
     - Bean's lifecycle 
     - Bean's lifecycle callback
+  
+- Day11 (21/05/13)
+    - Bean scope 
+  
