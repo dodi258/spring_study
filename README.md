@@ -46,5 +46,9 @@
     - Bean's lifecycle callback
   
 - Day11 (21/05/13)
-    - Bean scope 
+    - Bean scope
   
+- Day12 (21/05/14)
+    - Bean scope
+    - how to use SingletonBean with PrototypeBean
+    - DL : Dependency Lookup

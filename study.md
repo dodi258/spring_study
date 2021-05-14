@@ -446,4 +446,54 @@ PrototypeBean HelloBean() {
 --> 스프링 컨테이너는 프로토타입 빈을 생성하고, 의존관계 주입, 초기화 까지만 처리한다는 것. 
    --> 클라이언트에 빈을 반환하고 관리 끝. 
    --> 클라이언트가 빈을 관리해야함. 그래서 @PreDestroy 같은 종료 메서드가 호출되지 않는다. 
-   
+
+
+#### DL Dependency Lookup
+DL : 의존관계를 외부에서 주입 받는것이 아니라 필요한 의존관계를 직접 찾는것.
+**1) Spring 의 AnnotationConfigApplicationContext 사용**
+~~~java
+// 스프링 애플리케이션 컨텍스트 전체를 주입받는것. 
+// --> 스프링 컨테이너에 종속적이고, UNIT 테스트 어려워짐
+@Autowired
+  private ApplicationContext ac;
+  public int logic(){
+        PrototypeBean prototypeBean=ac.getBean(PrototypeBean.class);
+        prototypeBean.addCount();
+        int count=prototypeBean.getCount();
+        return count;
+    }
+~~~
+
+**2) ObjectProvider 를 이용한 DL**
+ObjectProvider: 지정한 빈을 컨테이너에서 대신 찾아주는 DL 서비스 제공
+.getObject(): 스프링 컨테이너를 통해 해당 빈을 찾아 반환함. 
+~~~java
+@Autowired
+private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+
+public int logic() {
+        PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+        prototypeBean.addCount();
+        int count = prototypeBean.getCount();
+        return count;
+    }
+~~~
+
+**3) Java Library 이용한 DL**
+implementation 'javax.inject:javax.inject:1' gradle 추가 필수
+~~~java
+public interface Provider<T> {
+    T get(); 
+}
+------------------------------------
+
+@Autowired
+private Provider<PrototypeBean> provider; 
+
+public int logic() {
+    PrototypeBean prototypeBean = provider.get(); 
+    prototypeBean.addCount(); 
+    int count = prototypeBean.getCount(); 
+    return count; 
+}
+~~~
