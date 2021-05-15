@@ -497,3 +497,22 @@ public int logic() {
     return count; 
 }
 ~~~
+**정리**
+실무에서 웹 애플리케이션을 개발해보면, 싱글톤 빈으로 대부분의 문제를 해결할 수 있기 때문에 프로토타입 빈을 사용하는 일은 드물다. 
+
+<웹 스코프>
+- 웹 환경에서만 동작한다. 
+- 웹 스코프는 프로토타입과 다르게 스프링이 해당 스코프의 종료시점까지 관리한다. 
+- web 환경 : spring-boot-starter-web 라이브러리 추가. 스프링 부트는 내장 톰켓 서버를 활용해서 웹 서버와 스프링을 함께 실행시킨다.
+- 스프링 부트는 웹 라이브러리가 없으면 우리가 지금까지 학습한 AnnotationConfigApplicationContext 을 기반으로 애플리케이션을 구동한다. 웹 라이브러리가 추가 되면 웹과 관련된 추가 설정과 환경들이 필요하므로 
+  AnnotationConfigServletWebServerApplicationContext 를 기반으로 애플리케이션을 구동한다.
+- 종류
+  - request: HTTP 요청 하나가 들어오고 나갈 때 까지 유지되는 스코프, 각각의 HTTP 요청마다 별도의 빈 인스턴스가 생성되고, 관리된다.
+  - session: HTTP Session 과 동일한 생명주기를 가지는 스코프
+  - application: 서블릿 컨텍스트(ServletContext) 와 동일한 생명주기를 가지는 스코프
+  - websocket: 웹 소켓과 동일한 생명주기를 가지는 스코프
+    
+request 스코프
+- 로깅을 일단 하자. : [UUID][requestURL][message]
+- uuid: HTTP 요청 구분
+- 실제 고객의 요청이 와야 빈을 생성할 수 있다. 

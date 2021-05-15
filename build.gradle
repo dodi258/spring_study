@@ -23,6 +23,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 
+	// ======== web env =========
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 	// ========= lombok =========
 	compileOnly 'org.project.lombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
