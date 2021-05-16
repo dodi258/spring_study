@@ -1,14 +1,16 @@
 package dodi258.core.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class LogDemoService {
-    private final MyLogger myLogger;
+    private final ObjectProvider<MyLogger> myLoggerProvider;
 
     public void logic(String id) {
+        MyLogger myLogger = myLoggerProvider.getObject();
         myLogger.log("service id = " + id);
     }
 }
@@ -22,4 +24,10 @@ request scope를 사용하지 않고 파라미터로 이 모든 정보를 서비
 서비스 계층은 웹 기술에 종속되지 않고, 가급적 순수하게 유지하는 것이 유지보수 관점에서 좋다.
 request scope의 MyLogger 덕분에 이런 부분을 파라미터로 넘기지 않고,
 MyLogger의 멤버변수에 저 장해서 코드와 계층을 깔끔하게 유지할 수 있다.
+ */
+
+/*
+ObjectProvider.getObject() 를 호출하는 시점에는 HTTP 요청이 진행중이므로, request scope 빈의 생성이 정상 처리된다.
+ObjectProvider.getObject() 를 LogDemoController, LogDemoService 에서 각각 한번씩 따로 호출해도 같은 HTTP 요청이면
+같은 스프링 빈이 반환된다.
  */

@@ -516,3 +516,10 @@ request 스코프
 - 로깅을 일단 하자. : [UUID][requestURL][message]
 - uuid: HTTP 요청 구분
 - 실제 고객의 요청이 와야 빈을 생성할 수 있다. 
+
+proxy 스코프
+- proxyMode
+    - ScopedProxyMode.TARGET_CLASS : 적용 대상이 클래스일 떄 
+    - ScopedProxyMode.INTERFACES : 적용 대상이 인터페이스 일때
+MyLogger 에 가짜 프록시 클래스를 만들어두고 HTTP request 와 상관 없이 가짜 프록시 클래스를 다른 빈에 미리 주입해 둘 수 있다. 
+  
