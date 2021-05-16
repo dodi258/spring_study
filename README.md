@@ -56,3 +56,6 @@
 - Day13 (21/05/15)
     - Bean scope : request 
     - make request scope testing code
+  
+- Day14 (21/05/16)
+    - Bean Scope: request , proxy mode 
