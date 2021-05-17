@@ -59,3 +59,7 @@
   
 - Day14 (21/05/16)
     - Bean Scope: request , proxy mode 
+  
+- Day15 (21/05/17)
+    - apply swagger for practice
+    - https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
