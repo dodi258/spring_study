@@ -26,6 +26,10 @@ dependencies {
 	// ======== web env =========
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	// ======== swagger =========
+	implementation "io.springfox:springfox-swagger2:2.9.2"
+	implementation "io.springfox:springfox-swgger-ui:2.9.2"
+
 	// ========= lombok =========
 	compileOnly 'org.project.lombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
